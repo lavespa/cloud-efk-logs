@@ -62,7 +62,7 @@ Creiamo il name space con:
 
 Eseguendo il controllo:
                
-			  kubectl get namespaces
+              kubectl get namespaces
 			  
 dovrebbe essere presente li nuovo namespace "kube-logging".
 
