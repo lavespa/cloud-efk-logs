@@ -225,3 +225,9 @@ k8s-logs è stato creato correttamente con il nodo es-cluster-0.
 La configurazione di Elasticsearch è quindi attiva e funzionante.  
 
 ## Step3 - Creazione di Kibana Deployment e Service
+
+Per avviare Kibana su Kubernetes, creeremo un servizio chiamato kibana e una resource Deployment composta da una replica del pod. 
+E' possibile ridimensionare il numero di repliche in base alle proprie esigenze di produzione e, facoltativamente, specificare 
+un LoadBalancer per il servizio allo scopo di bilanciare il carico delle richieste tra i pod di distribuzione.
+
+Questa volta creeremo il servizio e la distribuzione nello stesso file.
