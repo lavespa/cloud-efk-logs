@@ -114,5 +114,5 @@ Infine, ricontrolla che il servizio sia stato creato con successo utilizzando:
 
               kubectl get svc --namespace=kube-logging
 
-Ora che abbiamo configurato il nostro servizio headless e il dominio elasticsearch.kube-logging.svc.cluster.local  per i nostri pod, 
+Ora che abbiamo configurato il nostro servizio headless e il dominio elasticsearch.kube-logging.svc.cluster.local  per il nostro pod, 
 possiamo andare avanti e creare lo StatefulSet per ElasticSearch.
