@@ -29,7 +29,7 @@ Utilizzeremo infine Fluentd per raccogliere, trasformare e inviare i data loggin
 è un infatti un popolare data-collector open source facilmente configurabile sui nostri nodi Kubernetesmil cui scopo 
 è quello di intercettare, analizzare, filtrare e infine ttasformare i file di logging dei vari containr presenti sui
 container. Fondamentalmente quindi ogni container Fluentd non fa altro che leggere la cartella /vat/lib/docker per
-ottenere i log di ogni container sul nodo di J8s ed inviarli quindi a ElasticSearch. Infine, quando accediamo a Kibana
+ottenere i log di ogni container sul nodo di K8s ed inviarli quindi a ElasticSearch. Infine, quando accediamo a Kibana
 , richiediamo i log salvati sul backend di ElasticSearch. Possiamo riassumere con la seguente immagine, senza
 perderci in altre parole:
 
