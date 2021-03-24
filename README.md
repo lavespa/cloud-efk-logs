@@ -72,7 +72,7 @@ Ora che abbiamo creato uno spazio dei nomi per ospitare il nostro stack di regis
 Inizieremo innanzitutto distribuendo un cluster Elasticsearch con 1 nodo.
 
 ### Creazione di un Service tipo Headless
-Per iniziare, creeremo un servizio Kubernetes headless chiamato elasticsearch che definirà un dominio DNS per i 3 pod. Un servizio headless non 
+Per iniziare, creeremo un servizio Kubernetes headless chiamato elasticsearch che definirà un dominio DNS per il nostro pod di elasticsearch. Un servizio headless non 
 esegue il bilanciamento del carico o ha un IP statico.
 
 Eseguiamo il file "elasticsearch_svc.yaml" per creare il servizio per accedere al pod elasticsearch:
