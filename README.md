@@ -224,3 +224,4 @@ e se otteniamo una response 200(OK) allora è tutto ok. Nella respinse ottenuta 
 k8s-logs è stato creato correttamente con il nodo es-cluster-0.
 La configurazione di Elasticsearch è quindi attiva e funzionante.  
 
+## Step3 - Creazione di Kibana Deployment e Service
