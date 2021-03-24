@@ -116,3 +116,111 @@ Infine, ricontrolla che il servizio sia stato creato con successo utilizzando:
 
 Ora che abbiamo configurato il nostro servizio headless e il dominio elasticsearch.kube-logging.svc.cluster.local  per il nostro pod, 
 possiamo andare avanti e creare lo StatefulSet per ElasticSearch.
+
+### Creazione dello StatefulSet
+
+Un Kubernetes StatefulSet consente di assegnare un'identità stabile ai pod e di garantire loro uno spazio di archiviazione stabile e persistente. 
+Elasticsearch richiede una memoria stabile per rendere persistenti i dati durante il riavvio del pod. 
+I Deployment resources in K8s sono pensati per l'utilizzo senza stato e sono piuttosto leggeri. Gli StatefulSet vengono utilizzati quando lo stato 
+deve essere mantenuto. Pertanto, questi ultimi utilizzano dei volumeClaimTemplates/ cioè volumi persistenti per garantire che possano mantenere lo 
+stato durante i riavvii dei componenti.
+
+Eseguiamo il file "elasticsearch_statefulset.yaml" così definito: 
+
+```yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es-cluster
+  namespace: kube-logging
+spec:
+  serviceName: elasticsearch
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+        resources:
+            limits:
+              cpu: 1000m
+            requests:
+              cpu: 100m
+        ports:
+        - containerPort: 9200
+          name: rest
+          protocol: TCP
+        - containerPort: 9300
+          name: inter-node
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        env:
+          - name: cluster.name
+            value: k8s-logs
+          - name: node.name
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: discovery.seed_hosts
+            value: "es-cluster-0.elasticsearch"
+          - name: cluster.initial_master_nodes
+            value: "es-cluster-0"
+          - name: ES_JAVA_OPTS
+            value: "-Xms512m -Xmx512m"
+      initContainers:
+      - name: fix-permissions
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+      - name: increase-vm-max-map
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      - name: increase-fd-ulimit
+        image: busybox
+        command: ["sh", "-c", "ulimit -n 65536"]
+        securityContext:
+          privileged: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-persistent-cfg
+```
+
+Effettuiamo il deploy dello StatefulSet :
+
+              kubectl create -f elasticsearch_statefulset.yaml
+
+È possibile monitorare StatefulSet mentre viene distribuito utilizzando kubectl rollout status:
+
+              kubectl rollout status sts/es-cluster --namespace=kube-logging
+
+Una volta che tutti i pod sono stati installati e quindi in Running, puoi verificare che il tuo cluster Elasticsearch funzioni correttamente 
+eseguendo una richiesta di tipo REST.
+
+Per fare ciò, ènecessario effettuare una port-forward dalla porta locale 9200 alla porta 9200 su uno dei nodi Elasticsearch ( es-cluster-0) 
+utilizzando kubectl port-forward:
+
+              kubectl port-forward es-cluster-0 9200:9200 --namespace=kube-logging
+
+A questo aprendo una shell di Git Bash, eseguiamo:
+
+              curl http://localhost:9200/_cluster/state?pretty
+
+e se otteniamo una response 200(OK) allora è tutto ok. Nella respinse ottenuta sostanzialmente possiamo verificare che il nostro gruppo
+k8s-logs è stato creato correttamente con il nodo es-cluster-0.
+La configurazione di Elasticsearch è quindi attiva e funzionante.  
+
