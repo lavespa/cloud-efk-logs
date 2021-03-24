@@ -34,7 +34,7 @@ ottenere i log di ogni container sul nodo di J8s ed inviarli quindi a ElasticSea
 perderci in altre parole:
 
 
-<img width="880" alt="Diagram TraceId con Sleuth" src="https://github.com/lavespa/cloud-log-sleuth-zipkin/blob/main/image/tracing_sleuth.png">
+<img width="880" alt="Diagram TraceId con Sleuth" src="https://github.com/lavespa/cloud-efk-logs/blob/main/image/EFK_Stack.png">
 
 ## Step1 - Creazione namespace
 
