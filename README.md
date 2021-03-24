@@ -60,7 +60,7 @@ Creiamo il name space con:
 
               kubectl create -f kube-logging.yaml
 
-Eseguendo il controllo
+Eseguendo il controllo:
                
 			  kubectl get namespaces
 			  
