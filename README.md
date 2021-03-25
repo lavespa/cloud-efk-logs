@@ -781,7 +781,7 @@ con Kibana che i dati dei logs vengano raccolti e inviati correttamente ad Elast
 
 Per verificare questo andiamo su 
 
-              ["http://localhost:5601"](http://localhost:5601)
+              [Pippo](http://localhost:5601)
 
 e clicchiamo su Discover nel menu di navigazione laterale sx.
 Definiamo quindi un "index pattern" per Elasticsearch, utilizzando ad esempio il pattern "logstash-*" che ci permette di acquisire tutti i data log nel nostro cluster di Elasticsearch.
