@@ -96,7 +96,7 @@ spec:
       name: inter-node
 ```
 
-Definiamo un Service chiamat "elasticsearch" nel "kube-logging" Namespace e le assegniamo all'app il nome elasticsearch come etichetta label. 
+Definiamo un Service chiamato "elasticsearch" nel "kube-logging" Namespace e le assegniamo all'app il nome elasticsearch come etichetta label. 
 Quindi impostiamo nelle specifiche come selector sull'applicazione app come elasticsearch in modo che il servizio selezioni i pod con l'app 
 elasticsearch label. Quando associamo il nostro Elasticsearch StatefulSet a questo servizio, il servizio restituirà il record DNS(links, in questo caso 1) 
 che puntano a Elasticsearch Pod con l' app: elasticsearch label.
@@ -312,12 +312,12 @@ ufficiale di Kubernetes.
 
 Quindi apriamo e specifichiamo le porte 9200 e 9300 rispettivamente per l'API REST e la comunicazione tra nodi. Specifichiamo un volumeMount chiamato "data" che monterà il 
 PersistentVolume denominato "data" nel contenitore nel percorso /usr/share/elasticsearch/data. 
-Abbiamo infatti definito in pvc.yaml un VolumeClaims per questo StatefulSet che abbiamo specificatp pi+ avanti di questo blocco sotto volumes.
+Abbiamo infatti definito in pvc.yaml un VolumeClaims per questo StatefulSet che abbiamo specificatp più avanti di questo blocco sotto volumes.
 
-nfine, impostiamo alcune variabili d'ambiente nel contenitore:
+Infine, impostiamo alcune variabili d'ambiente nel contenitore:
 
 - cluster.name: Il nome del cluster Elasticsearch, che in questo caso ho settato a k8s-logs;
-- node.name: Il nome del nodo, che abbiamo impostato sul campo metadata.name utilizzando valueFrom. Questo è in pratica equivalente a es-cluster-[0];
+- node.name: Il nome del nodo che abbiamo impostato sul campo metadata.name utilizzando valueFrom. Questo è in pratica equivalente a es-cluster-[0];
 - discovery.seed_hosts: Questo campo ho deciso di aggiungerlo se si decide di utilizzare più repliche sul nodo. Esso infatti imposta 
 un elenco di nodi idonei per il master nel cluster che eseguiranno il seeding del processo di rilevamento dei nodi. Grazie al servizio headless che abbiamo 
 configurato in precedenza, nel caso in cui si definisse un set di 3 repliche ad esempio, i nostri Pod avranno i seguenti domini: 
@@ -362,8 +362,8 @@ Il secondo, denominato "increase-vm-max-map", esegue un comando per aumentare i 
 potrebbero essere troppo bassi, con conseguenti errori di memoria insufficiente. Per questa configurazione vedere la [Documentazione](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html) 
 su Elastic.
 
-Il prossimo InitContainer da eseguire è "increase-fd-ulimit", che esegue il comando ulimit per aumentare il numero massimo di di file aperti. In sostanza gli
-ulimits sono uno strumento di ottimizzazione delle prestazioni delle applicazioni linux, il cui scopo è quello di limitare l'utilizzo delle risorse di un programma
+Il prossimo InitContainer da eseguire è "increase-fd-ulimit", che esegue il comando ulimit per aumentare il numero massimo di file aperti. In sostanza gli
+ulimits sono uno strumento di ottimizzazione delle prestazioni delle applicazioni linux, il cui scopo è quello di limitare l'utilizzo delle risorse di un programma.
 Ad esempio nel caso di un cluster di microservizi (pods+service db+etc....) è possibile che vengano aperte migliaia di file mappati in memoria per gestire ad esempio
 migliaia di connessioni di rete. L'uso di ulimits è quindi essenziale per ottenere prestazioni adeguate nelle risorse K8s
 Tutte le info su qesta parte relativa alla scalabilità di Elasticsearch sono reperibili nella seguente [Documentazione](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_notes_for_production_use_and_defaults).
@@ -497,7 +497,7 @@ ed eseguiamo un port-forward dalla porta locale 5601 alla porta 5601 su questo p
 			  
 A questo punto dovremmo visualizzare la dashboard di benvenuto di Kibana correttamente nel nostro browser:
 
-              http://localhost:5601
+              [http://localhost:5601](http://localhost:5601)
 			  
 ## Step4 - Creazione di Fluentd come DaemonSet
 
@@ -507,7 +507,7 @@ strumento dedicato(Fluentd) che espone i logs o effettua il push dei logs ad un 
 che ha accesso ad una directory con i file di logs di tutti i container delle applicazioni su quel nodo.
 Affinchè questo logging-agent sia eseguito su ogni nodo, Kubernetes consiglia di eseguirlo come DaemonSet. Il logging quindi a livello di nodo è possibile 
 dunque creando un singolo agent-logging su ogni nodo e sopratutto non richiede nessuna modifica su tutte le applicazioni in esecuzione in quel nodo.
-Tutte i container delle applicazioni quindi sriveranno i loro logs(staout e stderr), senza un formato concordato, e il logging-agent a livello di nodo
+Tutti i container delle applicazioni quindi scriveranno i loro logs(staout e stderr), senza un formato concordato, e il logging-agent a livello di nodo
 li raccoglierà e l'inoltrerà in modo aggregato verso un backend.
 Il nostro logging-agent sarà in questo caso proprio Fluentd.
 
@@ -724,7 +724,7 @@ distribuire il DaemonSet di Fluentd anche sul nodo master del cluster. Questo a 
 Usiamo poi l'image Debian v1.4.2 ufficiale fornita dai manutentori di Fluentd. Il Dockerfile e il contenuto di questa immagine sono disponibili nel 
 seguente repository:
 
-              https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch
+              [https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch](https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch)
 			  
 Infine configuriamo Fluentd utilizzando alcune variabili di ambiente al fine di permettere la scrittura dei log sul backend di Elasticsearch:
 
@@ -732,7 +732,7 @@ Infine configuriamo Fluentd utilizzando alcune variabili di ambiente al fine di 
 - FLUENT_ELASTICSEARCH_PORT: Abbiamo impostato il valore della porta elasticsearch che abbiamo configurato in precedenza, 9200;
 - FLUENT_ELASTICSEARCH_SCHEME: Lo abbiamo impostato su http;
 - FLUENTD_SYSTEMD_CONF: Lo impostiamo su disable per sopprimere l'output correlato al systemd. In sostanza se non si imposta systemd(log system) nel container, fluentd mostra 
-tutti i messaggi du funzionamento del sistema.
+tutti i messaggi di funzionamento del sistema.
 
 Infine abbiamo l'ultimo blocco:
 
@@ -772,16 +772,16 @@ Eseguiamo aesso il DaemonSet con :
 
               kubectl create -f fluentd.yaml
 			  
-Verifica che il nostro DaemonSet sia stato implementato correttamente:
+Verifichiamo che il nostro DaemonSet sia stato implementato correttamente:
 
 kubectl get ds --namespace=kube-logging
 
-Se il nostro logging-agent è in esecuzione sull'unico pod (1) del nostro cluster che corrisponde al nostro unico nodo nel cluster, possaimo a questo punto controllare e verificare
+Se il nostro logging-agent è in esecuzione sull'unico pod (1) del nostro cluster che corrisponde al nostro unico nodo nel cluster, possiamo a questo punto controllare e verificare
 con Kibana che i dati dei logs vengano raccolti e inviati correttamente ad Elasticsearch..
 
 Per verificare questo andiamo su 
 
-              http://localhost:5601
+              [http://localhost:5601](http://localhost:5601)
 
 e clicchiamo su Discover nel menu di navigazione laterale sx.
 Definiamo quindi un "index pattern" per Elasticsearch, utilizzando ad esempio il pattern "logstash-*" che ci permette di acquisire tutti i data log nel nostro cluster di Elasticsearch.
@@ -792,6 +792,9 @@ presenti in base ad esempio al timestamp. Nel menù a discesa quindi inserirò @
 
 
 Clicchiamo nuovamente su Discover e dovremmo a questo punto visualizzare le stringhe di log recenti prodotte dal nostro Pod.
+
+A questo punto abbiamo configurato e implementato correttamente lo stack EFK sul nostro cluster Kubernetes.
+Per l'utilizzo di Kibana è disponibile la seguente [Documentazione](https://www.elastic.co/guide/en/kibana/current/index.html)
 
  
 
