@@ -497,7 +497,7 @@ ed eseguiamo un port-forward dalla porta locale 5601 alla porta 5601 su questo p
 			  
 A questo punto dovremmo visualizzare la dashboard di benvenuto di Kibana correttamente nel nostro browser:
 
-              [http://localhost:5601](http://localhost:5601)
+[http://localhost:5601](http://localhost:5601)
 			  
 ## Step4 - Creazione di Fluentd come DaemonSet
 
@@ -724,7 +724,7 @@ distribuire il DaemonSet di Fluentd anche sul nodo master del cluster. Questo a 
 Usiamo poi l'image Debian v1.4.2 ufficiale fornita dai manutentori di Fluentd. Il Dockerfile e il contenuto di questa immagine sono disponibili nel 
 seguente repository:
 
-              [https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch](https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch)
+[https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch](https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.4/debian-elasticsearch)
 			  
 Infine configuriamo Fluentd utilizzando alcune variabili di ambiente al fine di permettere la scrittura dei log sul backend di Elasticsearch:
 
