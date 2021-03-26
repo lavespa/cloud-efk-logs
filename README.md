@@ -26,10 +26,10 @@ e query per estrarre rapidamente i data-logging interessati e ottenere informazi
 ## Fluentd
 
 Utilizzeremo infine Fluentd per raccogliere, trasformare e inviare i data logging al backend di Elasticsearch. Fluentd
-è un infatti un popolare data-collector open source facilmente configurabile sui nostri nodi Kubernetesmil cui scopo 
-è quello di intercettare, analizzare, filtrare e infine ttasformare i file di logging dei vari containr presenti sui
-container. Fondamentalmente quindi ogni container Fluentd non fa altro che leggere la cartella /vat/lib/docker per
-ottenere i log di ogni container sul nodo di K8s ed inviarli quindi a ElasticSearch. Infine, quando accediamo a Kibana
+è infatti un popolare data-collector ,open source, facilmente configurabile sui nostri nodi Kubernetes il cui scopo 
+è quello di intercettare, analizzare, filtrare e infine trasformare i file di logging dei vari container presenti sui
+cluster di K8s. Fondamentalmente quindi ogni container Fluentd non fa altro che leggere la cartella /var/lib/docker per
+ricavare i log di ogni container sul nodo di K8s ed inviarli quindi a ElasticSearch. Infine, quando accediamo a Kibana
 , richiediamo i log salvati sul backend di ElasticSearch. Possiamo riassumere con la seguente immagine, senza
 perderci in altre parole:
 
